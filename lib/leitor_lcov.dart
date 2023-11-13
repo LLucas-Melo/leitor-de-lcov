@@ -21,7 +21,6 @@ String coverage(String lcovPath) {
         lineFound: lf,
         lineHit: lh,
       );
-
       reports.add(report);
       continue;
     }
