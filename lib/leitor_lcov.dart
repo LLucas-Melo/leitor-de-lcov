@@ -10,6 +10,26 @@ void main() {
 String coverage(String lcovPath) {
   final file = File(lcovPath);
   final content = file.readAsLinesSync();
+  final reports = contentToLineReports(content);
+  final percent = calculatePercent(reports);
+  return '${percent.round().toString()}';
+}
+
+int calculatePercent(List<LineReport> reports) {
+  int totalLF = 0;
+  int totalLH = 0;
+  for (var report in reports) {
+    totalLF += report.lineFound;
+    totalLH += report.lineHit;
+  }
+
+  final percent = (totalLH / totalLF) * 100;
+  print(percent);
+
+  return percent.round();
+}
+
+List<LineReport> contentToLineReports(List<String> content) {
   final reports = <LineReport>[];
   var sf = '';
   var lf = 0;
@@ -34,15 +54,5 @@ String coverage(String lcovPath) {
       lh = int.parse(line[1]);
     }
   }
-
-  int totalLF = 0;
-  int totalLH = 0;
-  for (var report in reports) {
-    totalLF += report.lineFound;
-    totalLH += report.lineHit;
-  }
-
-  final percent = (totalLH / totalLF) * 100;
-  print(percent);
-  return '${percent.round().toString()}';
+  return reports;
 }
